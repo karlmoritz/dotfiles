@@ -19,6 +19,8 @@ filetype plugin indent on   " use the file type plugins
 au InsertEnter * :let @/="" " Disable highlighted search on insert mode
 au InsertLeave * :let @/="" " Enable it back
 
+set cino=g0,N-s
+
 " Vim Addon Manager
 
 fun! EnsureVamIsOnDisk(plugin_root_dir)
@@ -50,6 +52,7 @@ fun! SetupVAM()
   call vam#ActivateAddons(['C11_Syntax_Support'])
   call vam#ActivateAddons(['OmniCppComplete'])
   call vam#ActivateAddons(['UltiSnips'])
+  call vam#ActivateAddons(['bufkill'])
   " call vam#ActivateAddons(['xptemplate'])
   call vam#ActivateAddons(['SuperTab%1643'])
   call vam#ActivateAddons(['a'])
@@ -122,6 +125,17 @@ autocmd bufwritepost,filewritepost *
 "      \   mkview |
 "      \   silent loadview |
 
+" avoid key conflict
+" let g:SuperTabMappingForward = '<Plug>supertabKey'
+" if nothing matched in xpt, try supertab
+" let g:xptemplate_fallback = '<Plug>supertabKey'
+" xpt uses <Tab> as trigger key
+" let g:xptemplate_key = '<Tab>'
+" " use <tab>/<S-tab> to navigate through pum. Optional
+" let g:xptemplate_pum_tab_nav = 1
+" " xpt triggers only when you typed whole name of a snippet. Optional
+" let g:xptemplate_minimal_prefix = 'full'
+
 " Nerd Comment settings
 
 "Documented, but doesn't work. Hack fix below.
@@ -150,6 +164,8 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " SuperTab completion fall-back 
 let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
+" let g:SuperTabDefaultCompletionType='<c-tab>'
+" let g:SuperTabNoCompleteAfter=''
 
 " Single Compile options
 noremap  <silent> <F9> :SCCompile<cr>
@@ -157,6 +173,26 @@ noremap  <silent> <F10> :SCCompileRun<cr>
 noremap! <silent> <F9> <c-o>:SCCompile<cr>
 noremap! <silent> <F10> <c-o>:SCCompileRun<cr>
 
+" Save and make current file.o on F7
+function! Make()
+  let curr_dir = expand('%:h')
+  if curr_dir == ''
+    let curr_dir = '.'
+  endif
+  echo curr_dir
+  execute 'lcd ' . curr_dir
+  execute 'make %:r.o'
+  execute 'lcd -'
+endfunction
+nnoremap <F7> :update<CR>:call Make()<CR>
+
+" Compile makefile on F6
+noremap <F6> :make<cr>
+noremap! <F6> <c-o>:make<cr>
+
+" Try to run current file (without extension) on F8
+noremap <F8> :!./%:r<cr>
+noremap! <F8> <c-o>:!./%:r<cr>
 
 " vimprj configuration
 
