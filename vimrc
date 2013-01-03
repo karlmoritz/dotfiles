@@ -10,10 +10,13 @@ set ai                      " auto indenting
 set history=100             " keep 100 lines of history
 set ruler                   " show the cursor position
 set hidden                  " hide buffer without notice
-set number 		    " always show the line number
+set number 		              " always show the line number
 set hlsearch                " highlight the last searched term
 set virtualedit=all         " let us walk in limbo
 set showcmd                 " show number of lines selected
+set relativenumber          " show line numbers relative to current
+set ignorecase              " search by default case insensitive
+set smartcase               " if there is any upper case character: sensitive search
 syntax on                   " syntax highlighting
 filetype plugin indent on   " use the file type plugins
 au InsertEnter * :let @/="" " Disable highlighted search on insert mode
@@ -50,7 +53,7 @@ fun! SetupVAM()
   call vam#ActivateAddons(['github:jistr/vim-nerdtree-tabs'])
   call vam#ActivateAddons(['Solarized'])
   call vam#ActivateAddons(['C11_Syntax_Support'])
-  call vam#ActivateAddons(['OmniCppComplete'])
+  call vam#ActivateAddons(['clang_complete'])
   call vam#ActivateAddons(['UltiSnips'])
   call vam#ActivateAddons(['bufkill'])
   " call vam#ActivateAddons(['xptemplate'])
@@ -92,6 +95,24 @@ let g:nerdtree_tabs_open_on_console_startup=0
 " This helps to keep the cursor in position
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
       \ exe "normal g'\"" | endif
+
+
+" Complete options (disable preview scratch window)
+set completeopt=menu,menuone,longest
+" Limit popup menu height
+set pumheight=15
+
+let g:clang_user_options = '-std=c++11 -stdlib=libstdc++'
+let g:clang_auto_user_options = ''
+
+ 
+" SuperTab option for context aware completion
+let g:SuperTabDefaultCompletionType = "context"
+
+" Disable auto popup, use <Tab> to autocomplete
+let g:clang_complete_auto = 0
+" Show clang errors in the quickfix window
+let g:clang_complete_copen = 1
 
 " Solarized settings
 "set terminal colors to 16. needed to make solarized scheme work
@@ -156,6 +177,26 @@ map <Leader>n <plug>NERDTreeTabsToggle<cr>
 map  <C-l> :tabn<CR>
 map  <C-h> :tabp<CR>
 
+" Use , for the leader key as opposed to \
+let mapleader = ","
+" Use <leader><space> to clean highlights
+nnoremap <leader><space> :noh<cr>
+
+" Disabling arrow keys. Let's do it
+"nnoremap <up> <nop>
+"nnoremap <down> <nop>
+"nnoremap <left> <nop>
+"nnoremap <right> <nop>
+"inoremap <up> <nop>
+"inoremap <down> <nop>
+"inoremap <left> <nop>
+"inoremap <right> <nop>
+"nnoremap j gj
+"nnoremap k gk
+
+" Make ; work same as :. No more shift :)
+nnoremap ; :
+
 " Use <tab> and <s-tab> for navigation in snippets
 let g:UltiSnipsListSnippets="<c-tab>" 
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -163,7 +204,7 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " SuperTab completion fall-back 
-let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
+" let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
 " let g:SuperTabDefaultCompletionType='<c-tab>'
 " let g:SuperTabNoCompleteAfter=''
 
@@ -218,6 +259,8 @@ endfunction
 function! g:vimprj#dHooks['OnAfterSourcingVimprj']['main_options'](dParams)
   unlet g:vimprj_dir
   if &ft == 'c' || &ft == 'cpp'  
+    let g:clang_user_options .= ' ' . g:my_includes
+    let g:single_compile_options .= ' ' . g:my_includes . ' ' . g:my_libraries
     call s:LoadSingleCompileOptions()
   endif                          
 endfunction

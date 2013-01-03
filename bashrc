@@ -112,7 +112,7 @@ export PATH=$PATH:$SRILM/bin:$SRILM/bin/i686-ubuntu
 export MANPATH=$MANPATH:$SRILM/man
 export PYTHONPATH=$PYTHONPATH:~/Files/git:~/Files/Tools/kenlm
 export PATH=$PATH:/usr/local/cuda/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib:/usr/local/cuda/lib64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib:/usr/local/cuda/lib64:/usr/local/lib
 
 # For some reason this doesn't happen properly
 xrdb -merge ~/.Xresources
