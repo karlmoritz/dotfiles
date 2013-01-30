@@ -17,6 +17,8 @@ set showcmd                 " show number of lines selected
 set relativenumber          " show line numbers relative to current
 set ignorecase              " search by default case insensitive
 set smartcase               " if there is any upper case character: sensitive search
+set textwidth=80            " linebreak after 80 characters (C++ default)
+set formatoptions=croqt     " Formatoptions: t/c: force linebreak r/o: continue comments in new line, q: format with gqq
 syntax on                   " syntax highlighting
 filetype plugin indent on   " use the file type plugins
 au InsertEnter * :let @/="" " Disable highlighted search on insert mode
@@ -85,10 +87,16 @@ au BufNewFile,BufRead *
 let g:rainbow_operators = 2 
 au FileType c,cpp,objc,objcpp call rainbow#activate()
 
+" Change to current directory automatically
+autocmd BufEnter * silent! lcd %:p:h
+" nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
 
 " Nerd tree: don't autostart, and ignore some files..
 
-let NERDTreeIgnore=['\env','\.vim$', '\~$', '\.pyc$', '\.swp$', '\.egg-info$', '\.DS_Store$', '^dist$', '^build$']
+let NERDTreeIgnore=['\env','\.vim$', '\~$', '\.pyc$', '\.swp$', '\.o$', 
+      \'\.egg-info$', '\.DS_Store$', '^dist$', '^build$']
+
 let g:nerdtree_tabs_open_on_console_startup=0
 
 " If file already open, don't create a new buffer, but use existing.
@@ -145,17 +153,6 @@ autocmd bufwritepost,filewritepost *
 
 "      \   mkview |
 "      \   silent loadview |
-
-" avoid key conflict
-" let g:SuperTabMappingForward = '<Plug>supertabKey'
-" if nothing matched in xpt, try supertab
-" let g:xptemplate_fallback = '<Plug>supertabKey'
-" xpt uses <Tab> as trigger key
-" let g:xptemplate_key = '<Tab>'
-" " use <tab>/<S-tab> to navigate through pum. Optional
-" let g:xptemplate_pum_tab_nav = 1
-" " xpt triggers only when you typed whole name of a snippet. Optional
-" let g:xptemplate_minimal_prefix = 'full'
 
 " Nerd Comment settings
 
@@ -241,6 +238,8 @@ noremap! <F8> <c-o>:!./%:r<cr>
 call vimprj#init()
 
 " vimprj hooks
+let g:my_includes = ''
+let g:my_libraries = ''
 
 " Called BEFORE sourcing .vimprj and when not sourcing
 function! g:vimprj#dHooks['SetDefaultOptions']['main_options'](dParams)

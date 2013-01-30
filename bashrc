@@ -100,6 +100,10 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
+if [ -f ~/.bash_paths ]; then
+  . ~/.bash_paths
+fi
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -107,16 +111,6 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-SRILM=/usr/share/srilm
-export PATH=$PATH:$SRILM/bin:$SRILM/bin/i686-ubuntu
-export MANPATH=$MANPATH:$SRILM/man
-export PYTHONPATH=$PYTHONPATH:~/Files/git:~/Files/Tools/kenlm
-export PATH=$PATH:/usr/local/cuda/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib:/usr/local/cuda/lib64:/usr/local/lib
-
 # For some reason this doesn't happen properly
 xrdb -merge ~/.Xresources
 
-alias android-connect="mtpfs -o allow_other /media/nexus10"
-
-alias android-disconnect="fusermount -u /media/nexus10"
