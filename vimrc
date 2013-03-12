@@ -10,7 +10,6 @@ set ai                      " auto indenting
 set history=100             " keep 100 lines of history
 set ruler                   " show the cursor position
 set hidden                  " hide buffer without notice
-set number 		              " always show the line number
 set hlsearch                " highlight the last searched term
 set virtualedit=all         " let us walk in limbo
 set showcmd                 " show number of lines selected
@@ -52,7 +51,8 @@ fun! SetupVAM()
   let &rtp.=(empty(&rtp)?'':',').plugin_root_dir.'/vim-addon-manager'
   call vam#ActivateAddons(['The_NERD_tree'])
   call vam#ActivateAddons(['The_NERD_Commenter'])
-  call vam#ActivateAddons(['github:jistr/vim-nerdtree-tabs'])
+  "call vam#ActivateAddons(['github:jistr/vim-nerdtree-tabs'])
+  "call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
   call vam#ActivateAddons(['Solarized'])
   call vam#ActivateAddons(['C11_Syntax_Support'])
   call vam#ActivateAddons(['clang_complete'])
@@ -65,6 +65,8 @@ fun! SetupVAM()
   call vam#ActivateAddons(['hg:http://hg.dfrank.ru/vim/bundle/dfrank_util'])
   call vam#ActivateAddons(['hg:http://hg.dfrank.ru/vim/bundle/vimprj'])
   call vam#ActivateAddons(['github:oblitum/rainbow'])
+  call vam#ActivateAddons(['github:techlivezheng/vim-plugin-minibufexpl'])
+  call vam#ActivateAddons(['bufexplorer.zip'])
   " (<c-x><c-p> complete plugin names):
 endfun
 call SetupVAM()
@@ -112,7 +114,7 @@ set pumheight=15
 
 let g:clang_user_options = '-std=c++11 -stdlib=libstdc++'
 let g:clang_auto_user_options = ''
-
+let g:clang_library_path="/usr/lib/"
  
 " SuperTab option for context aware completion
 let g:SuperTabDefaultCompletionType = "context"
@@ -164,18 +166,38 @@ autocmd bufwritepost,filewritepost *
 
 " REMAPPINGS
 
+" Use , for the leader key as opposed to \
+let mapleader = ","
+
 " Ctrl-C and Ctrl-V systemwide
 map  <C-V> "+gP
 cmap <C-V> <C-R>+
 vnoremap <C-C> "+y
 
 " Use NERD Tree on \n and use Ctrl-l and Ctrl-h to navigate between tabs
-map <Leader>n <plug>NERDTreeTabsToggle<cr>
-map  <C-l> :tabn<CR>
-map  <C-h> :tabp<CR>
+map \n :NERDTreeToggle<cr>
+" proper settings one day
+"map  <C-l> :bn<CR>   
+"map  <C-h> :bp<CR>   
 
-" Use , for the leader key as opposed to \
-let mapleader = ","
+map <C-left> :bp<CR>
+map <C-right> :bn<CR>
+nnoremap <Leader>b :bp<CR>
+nnoremap <Leader>f :bn<CR>
+nnoremap <Leader>1 :1b<CR>
+nnoremap <Leader>2 :2b<CR>
+nnoremap <Leader>3 :3b<CR>
+nnoremap <Leader>4 :4b<CR>
+nnoremap <Leader>5 :5b<CR>
+nnoremap <Leader>6 :6b<CR>
+nnoremap <Leader>7 :7b<CR>
+nnoremap <Leader>8 :8b<CR>
+nnoremap <Leader>9 :9b<CR>
+nnoremap <Leader>0 :10b<CR>
+"
+" Ctrl + Tab
+"let g:miniBufExplMapCTabSwitchBufs = 1
+
 " Use <leader><space> to clean highlights
 nnoremap <leader><space> :noh<cr>
 
@@ -247,8 +269,8 @@ function! g:vimprj#dHooks['SetDefaultOptions']['main_options'](dParams)
 
   if &ft == 'c' || &ft == 'cpp'  
     let g:sgcc_user_options = ''
-    if &ft == 'cpp'
-      let g:sgcc_user_options = '-std=c++0x'
+    if &ft == 'cpp' 
+      let g:sgcc_user_options = '-std=c++0x -stdlib=libstdc++ '
     endif
     let g:single_compile_options = '-O3 ' . g:sgcc_user_options
   endif
@@ -258,8 +280,8 @@ endfunction
 function! g:vimprj#dHooks['OnAfterSourcingVimprj']['main_options'](dParams)
   unlet g:vimprj_dir
   if &ft == 'c' || &ft == 'cpp'  
-    let g:clang_user_options .= ' ' . g:my_includes
-    let g:single_compile_options .= ' ' . g:my_includes . ' ' . g:my_libraries
+    let g:clang_user_options = '-std=c++0x -stdlib=libstdc++ ' . g:my_includes
+    let g:single_compile_options = "-O3 -std=c++0x " . g:my_includes . ' ' . g:my_libraries
     call s:LoadSingleCompileOptions()
   endif                          
 endfunction
@@ -285,3 +307,68 @@ function! s:LoadSingleCompileOptions()
         \g:common_run_command)
   call SingleCompile#ChooseCompiler('cpp', 'sgcc')
 endfunction
+
+"here is a more exotic version of my original Kwbd script
+"delete the buffer; keep windows; create a scratch buffer if no buffers left
+function s:Kwbd(kwbdStage)
+  if(a:kwbdStage == 1)
+    if(!buflisted(winbufnr(0)))
+      bd!
+      return
+    endif
+    let s:kwbdBufNum = bufnr("%")
+    let s:kwbdWinNum = winnr()
+    windo call s:Kwbd(2)
+    execute s:kwbdWinNum . 'wincmd w'
+    let s:buflistedLeft = 0
+    let s:bufFinalJump = 0
+    let l:nBufs = bufnr("$")
+    let l:i = 1
+    while(l:i <= l:nBufs)
+      if(l:i != s:kwbdBufNum)
+        if(buflisted(l:i))
+          let s:buflistedLeft = s:buflistedLeft + 1
+        else
+          if(bufexists(l:i) && !strlen(bufname(l:i)) && !s:bufFinalJump)
+            let s:bufFinalJump = l:i
+          endif
+        endif
+      endif
+      let l:i = l:i + 1
+    endwhile
+    if(!s:buflistedLeft)
+      if(s:bufFinalJump)
+        windo if(buflisted(winbufnr(0))) | execute "b! " . s:bufFinalJump | endif
+      else
+        enew
+        let l:newBuf = bufnr("%")
+        windo if(buflisted(winbufnr(0))) | execute "b! " . l:newBuf | endif
+      endif
+      execute s:kwbdWinNum . 'wincmd w'
+    endif
+    if(buflisted(s:kwbdBufNum) || s:kwbdBufNum == bufnr("%"))
+      execute "bd! " . s:kwbdBufNum
+    endif
+    if(!s:buflistedLeft)
+      set buflisted
+      set bufhidden=delete
+      set buftype=
+      setlocal noswapfile
+    endif
+  else
+    if(bufnr("%") == s:kwbdBufNum)
+      let prevbufvar = bufnr("#")
+      if(prevbufvar > 0 && buflisted(prevbufvar) && prevbufvar != s:kwbdBufNum)
+        b #
+      else
+        bn
+      endif
+    endif
+  endif
+endfunction
+
+command! Kwbd call s:Kwbd(1)
+nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
+
+" Create a mapping (e.g. in your .vimrc) like this:
+nmap <leader>q <Plug>Kwbd
