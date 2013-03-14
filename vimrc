@@ -34,13 +34,21 @@ fun! EnsureVamIsOnDisk(plugin_root_dir)
   else
     if 1 == confirm("Clone VAM into ".a:plugin_root_dir."?","&Y\n&N")
       call mkdir(a:plugin_root_dir, 'p')
-      execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '.
+      execute '!git clone --depth=1 git@github.com:MarcWeber/vim-addon-manager.git '.
             \       shellescape(a:plugin_root_dir, 1).'/vim-addon-manager'
       exec 'helptags '.fnameescape(a:plugin_root_dir.'/vim-addon-manager/doc')
     endif
     return isdirectory(vam_autoload_dir)
   endif
 endfun
+
+let g:vim_addon_manager = {'scms': {'git': {}}}
+     fun! MyGitCheckout(repository, targetDir)
+         let a:repository.url = substitute(a:repository.url, '^git://github.com/', 'git@github.com:', '')
+         let a:repository.url = substitute(a:repository.url, '$', '.git', '')
+         return vam#utils#RunShell('git clone --depth=1 $.url $p', a:repository, a:targetDir)
+     endfun
+let g:vim_addon_manager.scms.git.clone=['MyGitCheckout']
 
 fun! SetupVAM()
   let plugin_root_dir = expand('$HOME/.vim/vim-addons')
