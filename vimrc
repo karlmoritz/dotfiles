@@ -86,8 +86,7 @@ au BufNewFile,BufRead *
       \   endif                                                                                     |
       \ endif                                                                                       |
 
-let g:rainbow_operators = 2 
-au FileType c,cpp,objc,objcpp call rainbow#activate()
+
 
 " Change to current directory automatically
 autocmd BufEnter * silent! lcd %:p:h
@@ -135,6 +134,9 @@ colorscheme solarized
 " else
 "    set background=dark
 " endif
+
+let g:rainbow_operators = 2 
+au FileType c,cpp,objc,objcpp call rainbow#activate()
 
 " Automatic templates for C++ files
 autocmd bufnewfile *
