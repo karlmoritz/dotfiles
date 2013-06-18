@@ -60,21 +60,21 @@ fun! SetupVAM()
   call vam#ActivateAddons(['The_NERD_tree'])
   call vam#ActivateAddons(['The_NERD_Commenter'])
   "call vam#ActivateAddons(['github:jistr/vim-nerdtree-tabs'])
-  "call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
+  call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
   call vam#ActivateAddons(['Solarized'])
   call vam#ActivateAddons(['C11_Syntax_Support'])
-  call vam#ActivateAddons(['clang_complete'])
+  "call vam#ActivateAddons(['clang_complete'])
   call vam#ActivateAddons(['UltiSnips'])
   call vam#ActivateAddons(['bufkill'])
-  " call vam#ActivateAddons(['xptemplate'])
   call vam#ActivateAddons(['SuperTab%1643'])
   call vam#ActivateAddons(['a'])
   call vam#ActivateAddons(['SingleCompile'])
   call vam#ActivateAddons(['hg:http://hg.dfrank.ru/vim/bundle/dfrank_util'])
   call vam#ActivateAddons(['hg:http://hg.dfrank.ru/vim/bundle/vimprj'])
   call vam#ActivateAddons(['github:oblitum/rainbow'])
-  call vam#ActivateAddons(['github:techlivezheng/vim-plugin-minibufexpl'])
-  call vam#ActivateAddons(['bufexplorer.zip'])
+  "call vam#ActivateAddons(['github:suan/vim-instant-markdown'])
+  "suan/vim-instant-markdown
+  "call vam#ActivateAddons(['bufexplorer.zip'])
   " (<c-x><c-p> complete plugin names):
 endfun
 call SetupVAM()
@@ -88,7 +88,7 @@ au BufNewFile,BufRead *.vimprj set ft=vim
 " C++
 au FileType cpp,objcpp set syntax=cpp11
 au BufNewFile,BufRead *
-      \ if expand('%:e') =~ '^\(h\|hh\|hxx\|hpp\|ii\|ixx\|ipp\|inl\|txx\|tpp\|tpl\|cc\|cxx\|cpp\)$' |
+      \ if expand('%:e') =~ '^\(h\|hh\|hxx\|hpp\|ii\|ixx\|ipp\|inl\|cc\|cxx\|cpp\)$' |
       \   if &ft != 'cpp'                                                                           |
       \     set ft=cpp                                                                              |
       \   endif                                                                                     |
@@ -119,17 +119,17 @@ set completeopt=menu,menuone,longest
 " Limit popup menu height
 set pumheight=15
 
-let g:clang_user_options = '-std=c++11 -stdlib=libstdc++'
-let g:clang_auto_user_options = ''
-let g:clang_library_path="/usr/lib/"
+"let g:clang_user_options = '-std=c++11 -stdlib=libstdc++'
+"let g:clang_auto_user_options = ''
+"let g:clang_library_path="/usr/lib/"
  
-" SuperTab option for context aware completion
-let g:SuperTabDefaultCompletionType = "context"
+"" SuperTab option for context aware completion
+"let g:SuperTabDefaultCompletionType = "context"
 
-" Disable auto popup, use <Tab> to autocomplete
-let g:clang_complete_auto = 0
-" Show clang errors in the quickfix window
-let g:clang_complete_copen = 1
+"" Disable auto popup, use <Tab> to autocomplete
+"let g:clang_complete_auto = 0
+"" Show clang errors in the quickfix window
+"let g:clang_complete_copen = 1
 
 " Solarized settings
 "set terminal colors to 16. needed to make solarized scheme work
@@ -143,6 +143,11 @@ colorscheme solarized
 "    set background=dark
 " endif
 
+if v:version >= 700
+  au BufLeave * let b:winview = winsaveview()
+  au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+endif
+
 let g:rainbow_operators = 2 
 au FileType c,cpp,objc,objcpp call rainbow#activate()
 
@@ -150,7 +155,7 @@ au FileType c,cpp,objc,objcpp call rainbow#activate()
 autocmd bufnewfile *
       \ if &ft == 'cpp'                                                                       |
       \   so ~/.vim/cpp.header                                                                |
-      \   exe "1," . 16 . "g/@file:.*/s//@file: " .expand("%")                                |
+      \   exe "1," . 16 . "g/@file:.*/s//@file: " .expand("%:t")                              |
       \   exe "1," . 16 . "g/Created:.*/s//Created: " .strftime("%d-%m-%Y")                   |
       \   exe "1," . 18 . "g/BEGIN.*/s//"                                                     |
 
@@ -186,6 +191,7 @@ vnoremap <C-C> "+y
 
 " Use NERD Tree on \n and use Ctrl-l and Ctrl-h to navigate between tabs
 map \n :NERDTreeToggle<cr>
+map <Leader>n :NERDTreeToggle<cr>
 " proper settings one day
 "map  <C-l> :bn<CR>   
 "map  <C-h> :bp<CR>   
@@ -204,6 +210,8 @@ nnoremap <Leader>7 :7b<CR>
 nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
+
+nnoremap <Leader>q :BW<CR>
 "
 " Ctrl + Tab
 "let g:miniBufExplMapCTabSwitchBufs = 1
