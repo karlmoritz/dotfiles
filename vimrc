@@ -23,6 +23,11 @@ filetype plugin indent on   " use the file type plugins
 au InsertEnter * :let @/="" " Disable highlighted search on insert mode
 au InsertLeave * :let @/="" " Enable it back
 
+setlocal tabstop=8
+setlocal shiftwidth=2
+setlocal expandtab
+setlocal textwidth=80
+
 set cino=g0,N-s
 
 " Vim Addon Manager
@@ -34,7 +39,7 @@ fun! EnsureVamIsOnDisk(plugin_root_dir)
   else
     if 1 == confirm("Clone VAM into ".a:plugin_root_dir."?","&Y\n&N")
       call mkdir(a:plugin_root_dir, 'p')
-      execute '!git clone --depth=1 git@github.com:MarcWeber/vim-addon-manager.git '.
+      execute '!git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager.git '.
             \       shellescape(a:plugin_root_dir, 1).'/vim-addon-manager'
       exec 'helptags '.fnameescape(a:plugin_root_dir.'/vim-addon-manager/doc')
     endif
@@ -42,10 +47,12 @@ fun! EnsureVamIsOnDisk(plugin_root_dir)
   endif
 endfun
 
+" source /usr/share/vim/google/google.vim  " Initialize some basic settings
+
 let g:vim_addon_manager = {'scms': {'git': {}}}
      fun! MyGitCheckout(repository, targetDir)
-         let a:repository.url = substitute(a:repository.url, '^git://github.com/', 'git@github.com:', '')
-         let a:repository.url = substitute(a:repository.url, '$', '.git', '')
+         " let a:repository.url = substitute(a:repository.url, '^git://github.com/', 'git@github.com:', '')
+         " let a:repository.url = substitute(a:repository.url, '$', '.git', '')
          return vam#utils#RunShell('git clone --depth=1 $.url $p', a:repository, a:targetDir)
      endfun
 let g:vim_addon_manager.scms.git.clone=['MyGitCheckout']
@@ -59,22 +66,13 @@ fun! SetupVAM()
   let &rtp.=(empty(&rtp)?'':',').plugin_root_dir.'/vim-addon-manager'
   call vam#ActivateAddons(['The_NERD_tree'])
   call vam#ActivateAddons(['The_NERD_Commenter'])
-  "call vam#ActivateAddons(['github:jistr/vim-nerdtree-tabs'])
   call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
   call vam#ActivateAddons(['Solarized'])
   call vam#ActivateAddons(['C11_Syntax_Support'])
-  "call vam#ActivateAddons(['clang_complete'])
-  call vam#ActivateAddons(['UltiSnips'])
   call vam#ActivateAddons(['bufkill'])
   call vam#ActivateAddons(['SuperTab%1643'])
   call vam#ActivateAddons(['a'])
-  call vam#ActivateAddons(['SingleCompile'])
-  call vam#ActivateAddons(['hg:http://hg.dfrank.ru/vim/bundle/dfrank_util'])
-  call vam#ActivateAddons(['hg:http://hg.dfrank.ru/vim/bundle/vimprj'])
   call vam#ActivateAddons(['github:oblitum/rainbow'])
-  "call vam#ActivateAddons(['github:suan/vim-instant-markdown'])
-  "suan/vim-instant-markdown
-  "call vam#ActivateAddons(['bufexplorer.zip'])
   " (<c-x><c-p> complete plugin names):
 endfun
 call SetupVAM()
@@ -99,7 +97,6 @@ au BufNewFile,BufRead *
 " Change to current directory automatically
 autocmd BufEnter * silent! lcd %:p:h
 " nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
-
 
 " Nerd tree: don't autostart, and ignore some files..
 
@@ -136,7 +133,7 @@ set pumheight=15
 se t_Co=16
 syntax enable
 set background=dark
-colorscheme solarized
+" colorscheme solarized
 " if has('gui_running')
 "    set background=light
 " else
@@ -151,27 +148,8 @@ endif
 let g:rainbow_operators = 2 
 au FileType c,cpp,objc,objcpp call rainbow#activate()
 
-" Automatic templates for C++ files
-autocmd bufnewfile *
-      \ if &ft == 'cpp'                                                                       |
-      \   so ~/.vim/cpp.header                                                                |
-      \   exe "1," . 16 . "g/@file:.*/s//@file: " .expand("%:t")                              |
-      \   exe "1," . 16 . "g/Created:.*/s//Created: " .strftime("%d-%m-%Y")                   |
-      \   exe "1," . 18 . "g/BEGIN.*/s//"                                                     |
-
-autocmd bufwritepre,filewritepre *
-      \ if &ft == 'cpp'                                                                       |
-      \   let g:winview = winsaveview()                                                       |
-      \   exe "1," . 16 . "g/Last Update:.*/s/Last Update:.*/Last Update: " .strftime("%c")   |
-
-autocmd bufwritepost,filewritepost *
-      \ if &ft == 'cpp'                                                                       |
-      \   call winrestview(g:winview)                                                         |
-
-"      \   mkview |
-"      \   silent loadview |
-
 " Nerd Comment settings
+let g:NERDSpaceDelims = 1
 
 "Documented, but doesn't work. Hack fix below.
 "let g:NERD_cpp_alt_style=0
@@ -244,87 +222,6 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
 " let g:SuperTabDefaultCompletionType='<c-tab>'
 " let g:SuperTabNoCompleteAfter=''
-
-" Single Compile options
-noremap  <silent> <F9> :SCCompile<cr>
-noremap  <silent> <F10> :SCCompileRun<cr>
-noremap! <silent> <F9> <c-o>:SCCompile<cr>
-noremap! <silent> <F10> <c-o>:SCCompileRun<cr>
-
-" Save and make current file.o on F7
-function! Make()
-  let curr_dir = expand('%:h')
-  if curr_dir == ''
-    let curr_dir = '.'
-  endif
-  echo curr_dir
-  execute 'lcd ' . curr_dir
-  execute 'make %:r.o'
-  execute 'lcd -'
-endfunction
-nnoremap <F7> :update<CR>:call Make()<CR>
-
-" Compile makefile on F6
-noremap <F6> :make<cr>
-noremap! <F6> <c-o>:make<cr>
-
-" Try to run current file (without extension) on F8
-noremap <F8> :!./%:r<cr>
-noremap! <F8> <c-o>:!./%:r<cr>
-
-" vimprj configuration
-
-" Initialize vimprj plugin
-call vimprj#init()
-
-" vimprj hooks
-let g:my_includes = ''
-let g:my_libraries = ''
-
-" Called BEFORE sourcing .vimprj and when not sourcing
-function! g:vimprj#dHooks['SetDefaultOptions']['main_options'](dParams)
-  let g:vimprj_dir = substitute(a:dParams['sVimprjDirName'], '[/\\]\.vimprj$', '', '')
-
-  if &ft == 'c' || &ft == 'cpp'  
-    let g:sgcc_user_options = ''
-    if &ft == 'cpp' 
-      let g:sgcc_user_options = '-std=c++0x -stdlib=libstdc++ '
-    endif
-    let g:single_compile_options = '-O3 ' . g:sgcc_user_options
-  endif
-endfunction
-
-" Called AFTER sourcing .vimprj and when not sourcing
-function! g:vimprj#dHooks['OnAfterSourcingVimprj']['main_options'](dParams)
-  unlet g:vimprj_dir
-  if &ft == 'c' || &ft == 'cpp'  
-    let g:clang_user_options = '-std=c++0x -stdlib=libstdc++ ' . g:my_includes
-    let g:single_compile_options = "-O3 -std=c++0x " . g:my_includes . ' ' . g:my_libraries
-    call s:LoadSingleCompileOptions()
-  endif                          
-endfunction
-
-" SingleCompile for C++
-
-let g:common_run_command='./$(FILE_TITLE)$'
-
-function! s:LoadSingleCompileOptions()
-  call SingleCompile#SetCompilerTemplate('c', 
-        \'sgcc', 
-        \'GNU project C and C++ compiler', 
-        \'gcc', 
-        \'-o $(FILE_TITLE)$ ' . g:single_compile_options, 
-        \g:common_run_command)
-  call SingleCompile#ChooseCompiler('c', 'sgcc')
-
-  call SingleCompile#SetCompilerTemplate('cpp', 
-        \'sgcc', 
-        \'GNU project C and C++ compiler', 
-        \'g++', 
-        \'-o $(FILE_TITLE)$ ' . g:single_compile_options, 
-        \g:common_run_command)
-  call SingleCompile#ChooseCompiler('cpp', 'sgcc')
-endfunction
 
 "here is a more exotic version of my original Kwbd script
 "delete the buffer; keep windows; create a scratch buffer if no buffers left
