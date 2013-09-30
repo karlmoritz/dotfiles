@@ -47,8 +47,6 @@ fun! EnsureVamIsOnDisk(plugin_root_dir)
   endif
 endfun
 
-" source /usr/share/vim/google/google.vim  " Initialize some basic settings
-
 let g:vim_addon_manager = {'scms': {'git': {}}}
      fun! MyGitCheckout(repository, targetDir)
          " let a:repository.url = substitute(a:repository.url, '^git://github.com/', 'git@github.com:', '')
