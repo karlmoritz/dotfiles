@@ -19,7 +19,7 @@ set clipboard=unnamedplus      " for simplified clipboard copy/paste
 set backspace=indent,eol,start " no constraints for backspace
 set laststatus=2               " always display the statusline in all windows
 set noshowmode                 " hide the default mode text (e.g. -- INSERT -- below the statusline)
-set t_Co=16                   " configure for 256 colors terminal
+set t_Co=256                   " configure for 256 colors terminal
 set textwidth=80            " linebreak after 80 characters (C++ default)
 set formatoptions=croqt     " Formatoptions: t/c: force linebreak r/o: continue comments in new line, q: format with gqq
 
@@ -78,7 +78,7 @@ fun! SetupVAM()
   call vam#ActivateAddons(['bufkill'])
   call vam#ActivateAddons(['SuperTab%1643'])
   call vam#ActivateAddons(['a'])
-  " call vam#ActivateAddons(['Rainbow_Parentheses_Improved'])
+  call vam#ActivateAddons(['github:bling/vim-airline'])
   call vam#ActivateAddons(['github-oblitum-rainbow'])
   " (<c-x><c-p> complete plugin names):
 endfun
@@ -135,22 +135,43 @@ set pumheight=15
 "" Show clang errors in the quickfix window
 "let g:clang_complete_copen = 1
 
+" GUI Settings
+if has('gui_running')
+  " Remove scroll bars
+  set guioptions-=L
+  set guioptions-=R
+  set guioptions-=l
+  set guioptions-=r
+
+  " Disable toolbar
+  set guioptions=-t
+endif
+
+
+
 " Solarized settings
 "set terminal colors to 16. needed to make solarized scheme work
 syntax on
 set background=dark
 colorscheme solarized
 
+" vim-airline Setup
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'solarized'
+
 " Some syntax highlighting to annoy me if I mistype.
 set colorcolumn=80
-highlight ColorColumn guibg=#880000
-highlight TrailingWhitespace guibg=#FF0000
-highlight ExtraWhitespace    guibg=#00f43f
+highlight ColorColumn guibg=#073642
+highlight TrailingWhitespace guibg=#b58900
+highlight ExtraWhitespace    guibg=#b58900
 highlight TrailingWhitespace ctermbg=3
 highlight ColorColumn ctermbg=0
-" highlight ExtraWhitespace    ctermbg=3
+highlight ExtraWhitespace    ctermbg=3
+
 autocmd Syntax * call matchadd('TrailingWhitespace', '\s\+$')
 " autocmd Syntax * call matchadd('ExtraWhitespace',    '\S\+\zs\s\{2,}\ze\S\+')
+
+
 
 if v:version >= 700
   au BufLeave * let b:winview = winsaveview()
@@ -225,6 +246,9 @@ nnoremap <leader><space> :noh<cr>
 
 " Make ; work same as :. No more shift :)
 nnoremap ; :
+
+" Easy out of insert mode with double i.
+inoremap ii <ESC>
 
 " Use <tab> and <s-tab> for navigation in snippets
 let g:UltiSnipsListSnippets="<c-tab>" 
