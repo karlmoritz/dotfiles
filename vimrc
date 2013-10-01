@@ -1,32 +1,40 @@
 " General Settings
-set expandtab
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
+set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 set nocompatible            " We're running Vim, not Vi!
 set noswapfile              " No swap files
 set visualbell t_vb=        " No visual bell
 set ai                      " auto indenting
-set history=100             " keep 100 lines of history
+set history=1000            " keep 100 lines of history
 set ruler                   " show the cursor position
 set hidden                  " hide buffer without notice
 set hlsearch                " highlight the last searched term
+set nowrap                     " don't wrap lines
 set virtualedit=all         " let us walk in limbo
 set showcmd                 " show number of lines selected
 set relativenumber          " show line numbers relative to current
+set sessionoptions=blank,buffers,curdir,help,tabpages,winsize  " discards plugin stuff on saving session
 set ignorecase              " search by default case insensitive
 set smartcase               " if there is any upper case character: sensitive search
+set clipboard=unnamedplus      " for simplified clipboard copy/paste
+set backspace=indent,eol,start " no constraints for backspace
+set laststatus=2               " always display the statusline in all windows
+set noshowmode                 " hide the default mode text (e.g. -- INSERT -- below the statusline)
+set t_Co=16                   " configure for 256 colors terminal
 set textwidth=80            " linebreak after 80 characters (C++ default)
 set formatoptions=croqt     " Formatoptions: t/c: force linebreak r/o: continue comments in new line, q: format with gqq
+
+set wildignore+=CMakeFiles     " add ignored extension
+set wildignore+=*.pyc          " add ignored extension
+set wildignore+=*.dylib        " add ignored extension
+
+setlocal expandtab
+
 syntax on                   " syntax highlighting
 filetype plugin indent on   " use the file type plugins
 au InsertEnter * :let @/="" " Disable highlighted search on insert mode
 au InsertLeave * :let @/="" " Enable it back
-
-setlocal tabstop=8
-setlocal shiftwidth=2
-setlocal expandtab
-setlocal textwidth=80
+au GUIEnter * set vb t_vb=     " No GUI visual bell
+au VimEnter * set vb t_vb=     " No CLI visual bell
 
 set cino=g0,N-s
 
@@ -70,7 +78,8 @@ fun! SetupVAM()
   call vam#ActivateAddons(['bufkill'])
   call vam#ActivateAddons(['SuperTab%1643'])
   call vam#ActivateAddons(['a'])
-  call vam#ActivateAddons(['github:oblitum/rainbow'])
+  " call vam#ActivateAddons(['Rainbow_Parentheses_Improved'])
+  call vam#ActivateAddons(['github-oblitum-rainbow'])
   " (<c-x><c-p> complete plugin names):
 endfun
 call SetupVAM()
@@ -128,23 +137,30 @@ set pumheight=15
 
 " Solarized settings
 "set terminal colors to 16. needed to make solarized scheme work
-se t_Co=16
-syntax enable
+syntax on
 set background=dark
-" colorscheme solarized
-" if has('gui_running')
-"    set background=light
-" else
-"    set background=dark
-" endif
+colorscheme solarized
+
+" Some syntax highlighting to annoy me if I mistype.
+set colorcolumn=80
+highlight ColorColumn guibg=#880000
+highlight TrailingWhitespace guibg=#FF0000
+highlight ExtraWhitespace    guibg=#00f43f
+highlight TrailingWhitespace ctermbg=3
+highlight ColorColumn ctermbg=0
+" highlight ExtraWhitespace    ctermbg=3
+autocmd Syntax * call matchadd('TrailingWhitespace', '\s\+$')
+" autocmd Syntax * call matchadd('ExtraWhitespace',    '\S\+\zs\s\{2,}\ze\S\+')
 
 if v:version >= 700
   au BufLeave * let b:winview = winsaveview()
   au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 endif
 
-let g:rainbow_operators = 2 
-au FileType c,cpp,objc,objcpp call rainbow#activate()
+" Activate Rainbow and match colors to t_Co=16 Solarized palette.
+let g:rainbow_active = 1
+let g:rainbow_operators = 1
+let g:rainbow_ctermfgs = [1, 2, 3, 4, 5, 6, 9, 13, 12]
 
 " Nerd Comment settings
 let g:NERDSpaceDelims = 1
