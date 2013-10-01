@@ -80,9 +80,11 @@ fun! SetupVAM()
   call vam#ActivateAddons(['a'])
   call vam#ActivateAddons(['github:bling/vim-airline'])
   call vam#ActivateAddons(['github-oblitum-rainbow'])
+  " call vam#ActivateAddons(['github:Raimondi/delimitMate'])
   " (<c-x><c-p> complete plugin names):
 endfun
 call SetupVAM()
+
 
 
 " File Types
@@ -156,6 +158,8 @@ set background=dark
 colorscheme solarized
 
 " vim-airline Setup
+" Font access (probably not needed).
+" set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim/
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'solarized'
 
@@ -171,6 +175,9 @@ highlight ExtraWhitespace    ctermbg=3
 autocmd Syntax * call matchadd('TrailingWhitespace', '\s\+$')
 " autocmd Syntax * call matchadd('ExtraWhitespace',    '\S\+\zs\s\{2,}\ze\S\+')
 
+" delimitMate Setup
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
 
 
 if v:version >= 700
@@ -260,6 +267,27 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
 " let g:SuperTabDefaultCompletionType='<c-tab>'
 " let g:SuperTabNoCompleteAfter=''
+
+
+
+" Automatic templates for C++ files
+autocmd bufnewfile *
+      \ if &ft == 'cpp'                                                                       |
+      \   so ~/.vim/cpp.header                                                                |
+      \   exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                              |
+      \   exe "1," . 6 . "g/Created:.*/s//Created: " .strftime("%d-%m-%Y")                   |
+      \   exe "1," . 6 . "g/BEGIN.*/s//"                                                     |
+
+autocmd bufwritepre,filewritepre *
+      \ if &ft == 'cpp'                                                                       |
+      \   let g:winview = winsaveview()                                                       |
+      \   exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                              |
+      \   exe "1," . 6 . "g/Last Update:.*/s/Last Update:.*/Last Update: " .strftime("%c")   |
+
+autocmd bufwritepost,filewritepost *
+      \ if &ft == 'cpp'                                                                       |
+      \   call winrestview(g:winview)                                                         |
+
 
 "here is a more exotic version of my original Kwbd script
 "delete the buffer; keep windows; create a scratch buffer if no buffers left

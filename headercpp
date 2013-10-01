@@ -1,20 +1,8 @@
-:insert                                     
-//========================================================================
-/* @file:    
- * @author: Karl Moritz Hermann | mail@karlmoritz.com 
- * @version: 1.0
- * @date
- *  Created:    
- *  Last Update:
- */
-/*------------------------------------------------------------------------
- * Description: <DESC> 
- * 
- *------------------------------------------------------------------------
- * History:
- * TODO:    
- *========================================================================
- */
+:insert
+// File:
+// Author: Karl Moritz Hermann (mail@karlmoritz.com)
+// Created:
+// Last Update:
 
  BEGIN
  .
