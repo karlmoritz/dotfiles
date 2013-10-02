@@ -72,7 +72,7 @@ fun! SetupVAM()
   let &rtp.=(empty(&rtp)?'':',').plugin_root_dir.'/vim-addon-manager'
   call vam#ActivateAddons(['The_NERD_tree'])
   call vam#ActivateAddons(['The_NERD_Commenter'])
-  " call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
+  call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
   call vam#ActivateAddons(['Solarized'])
   call vam#ActivateAddons(['C11_Syntax_Support'])
   call vam#ActivateAddons(['bufkill'])
@@ -162,9 +162,9 @@ colorscheme solarized
 " set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim/
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'solarized'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#buffer_nr_format = '%s '
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#buffer_nr_show = 1
+" let g:airline#extensions#tabline#buffer_nr_format = '%s '
 " let g:airline#extensions#bufferline#enabled = 1
 " let g:airline#extensions#bufferline#show_bufnr = 1
 
@@ -239,7 +239,7 @@ nnoremap <Leader>0 :10b<CR>
 nnoremap <Leader>q :BW<CR>
 "
 " Ctrl + Tab
-"let g:miniBufExplMapCTabSwitchBufs = 1
+" let g:miniBufExplMapCTabSwitchBufs = 1
 
 " Use <leader><space> to clean highlights
 nnoremap <leader><space> :noh<cr>
