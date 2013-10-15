@@ -80,6 +80,7 @@ fun! SetupVAM()
   call vam#ActivateAddons(['a'])
   call vam#ActivateAddons(['github:bling/vim-airline'])
   call vam#ActivateAddons(['github:oblitum/rainbow'])
+  call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
   " call vam#ActivateAddons(['github:Raimondi/delimitMate'])
   " (<c-x><c-p> complete plugin names):
 endfun
@@ -106,6 +107,9 @@ au BufNewFile,BufRead *
 " Change to current directory automatically
 autocmd BufEnter * silent! lcd %:p:h
 " nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
+" Automatically remove trailing whitespace from certain filetypes.
+autocmd FileType c,cpp,java,php,markdown autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 " Nerd tree: don't autostart, and ignore some files..
 
@@ -261,6 +265,8 @@ nnoremap ; :
 
 " Easy out of insert mode with double i.
 inoremap ii <ESC>
+
+nnoremap <Leader>- :HeaderguardAdd<CR>
 
 " Use <tab> and <s-tab> for navigation in snippets
 let g:UltiSnipsListSnippets="<c-tab>" 
