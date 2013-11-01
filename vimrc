@@ -36,7 +36,11 @@ au InsertLeave * :let @/="" " Enable it back
 au GUIEnter * set vb t_vb=     " No GUI visual bell
 au VimEnter * set vb t_vb=     " No CLI visual bell
 
-set cino=g0,N-s
+" set cino=g0,N-s
+" Configure auto-indentation formatting.
+set cindent
+set cinoptions=h1,l1,g1,t0,(0,w1,W4,N-s
+let b:undo_indent = "setl sw< ts< sts< et< tw< wrap< cin< cino< inde<"
 
 " Vim Addon Manager
 
@@ -222,8 +226,8 @@ vnoremap <C-C> "+y
 map \n :NERDTreeToggle<cr>
 map <Leader>n :NERDTreeToggle<cr>
 " proper settings one day
-"map  <C-l> :bn<CR>   
-"map  <C-h> :bp<CR>   
+"map  <C-l> :bn<CR>
+"map  <C-h> :bp<CR>
 
 map <C-left> :bp<CR>
 map <C-right> :bn<CR>
@@ -269,12 +273,12 @@ inoremap ii <ESC>
 nnoremap <Leader>- :HeaderguardAdd<CR>
 
 " Use <tab> and <s-tab> for navigation in snippets
-let g:UltiSnipsListSnippets="<c-tab>" 
+let g:UltiSnipsListSnippets="<c-tab>"
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
-" SuperTab completion fall-back 
+" SuperTab completion fall-back
 " let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
 " let g:SuperTabDefaultCompletionType='<c-tab>'
 " let g:SuperTabNoCompleteAfter=''
@@ -287,17 +291,21 @@ autocmd bufnewfile *
       \   so ~/.vim/cpp.header                                                                |
       \   exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                              |
       \   exe "1," . 6 . "g/Created:.*/s//Created: " .strftime("%d-%m-%Y")                   |
-      \   exe "1," . 6 . "g/BEGIN.*/s//"                                                     |
+      \   exe "1," . 7 . "g/BEGIN.*/s//"                                                     |
 
 autocmd bufwritepre,filewritepre *
       \ if &ft == 'cpp'                                                                       |
-      \   let g:winview = winsaveview()                                                       |
-      \   exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                              |
-      \   exe "1," . 6 . "g/Last Update:.*/s/Last Update:.*/Last Update: " .strftime("%c")   |
+      \   let xline = getline(1)                                                             |
+      \   if xline == '// Copyright 2013 Karl Moritz Hermann'                                |
+      \     let g:winview = winsaveview()                                                     |
+      \     exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                               |
+      \     exe "1," . 6 . "g/Last Update:.*/s/Last Update:.*/Last Update: " .strftime("%c")  |
 
 autocmd bufwritepost,filewritepost *
       \ if &ft == 'cpp'                                                                       |
-      \   call winrestview(g:winview)                                                         |
+      \   let xline = getline(1)                                                             |
+      \   if xline == '// Copyright 2013 Karl Moritz Hermann'                                |
+      \     call winrestview(g:winview)                                                       |
 
 
 "here is a more exotic version of my original Kwbd script
