@@ -27,6 +27,9 @@ set wildignore+=CMakeFiles     " add ignored extension
 set wildignore+=*.pyc          " add ignored extension
 set wildignore+=*.dylib        " add ignored extension
 
+set foldmethod=syntax                                                                  |
+set foldlevelstart=20
+
 setlocal expandtab
 
 syntax on                   " syntax highlighting
@@ -74,7 +77,7 @@ fun! SetupVAM()
     return
   endif
   let &rtp.=(empty(&rtp)?'':',').plugin_root_dir.'/vim-addon-manager'
-  call vam#ActivateAddons(['The_NERD_tree'])
+  " call vam#ActivateAddons(['The_NERD_tree'])
   call vam#ActivateAddons(['The_NERD_Commenter'])
   call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
   call vam#ActivateAddons(['Solarized'])
@@ -83,8 +86,9 @@ fun! SetupVAM()
   call vam#ActivateAddons(['Supertab'])
   call vam#ActivateAddons(['a'])
   call vam#ActivateAddons(['github:bling/vim-airline'])
-  call vam#ActivateAddons(['github:oblitum/rainbow'])
+  " call vam#ActivateAddons(['github:oblitum/rainbow'])
   call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
+  "
   " call vam#ActivateAddons(['github:Raimondi/delimitMate'])
   " (<c-x><c-p> complete plugin names):
 endfun
@@ -113,14 +117,14 @@ autocmd BufEnter * silent! lcd %:p:h
 " nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Automatically remove trailing whitespace from certain filetypes.
-autocmd FileType c,cpp,java,php,markdown autocmd BufWritePre <buffer> :%s/\s\+$//e
+autocmd FileType c,cpp,java,php,markdown,sh,python autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 " Nerd tree: don't autostart, and ignore some files..
 
-let NERDTreeIgnore=['\env','\.vim$', '\~$', '\.pyc$', '\.swp$', '\.o$', 
-      \'\.egg-info$', '\.DS_Store$', '^dist$', '^build$']
+" let NERDTreeIgnore=['\env','\.vim$', '\~$', '\.pyc$', '\.swp$', '\.o$', 
+      " \'\.egg-info$', '\.DS_Store$', '^dist$', '^build$']
 
-let g:nerdtree_tabs_open_on_console_startup=0
+" let g:nerdtree_tabs_open_on_console_startup=0
 
 " If file already open, don't create a new buffer, but use existing.
 " This helps to keep the cursor in position
@@ -170,6 +174,7 @@ colorscheme solarized
 " set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim/
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'solarized'
+set fillchars=diff:·
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#buffer_nr_show = 1
 " let g:airline#extensions#tabline#buffer_nr_format = '%s '
@@ -292,6 +297,7 @@ autocmd bufnewfile *
       \   exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                              |
       \   exe "1," . 6 . "g/Created:.*/s//Created: " .strftime("%d-%m-%Y")                   |
       \   exe "1," . 7 . "g/BEGIN.*/s//"                                                     |
+      \ endif |
 
 autocmd bufwritepre,filewritepre *
       \ if &ft == 'cpp'                                                                       |
@@ -300,12 +306,16 @@ autocmd bufwritepre,filewritepre *
       \     let g:winview = winsaveview()                                                     |
       \     exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                               |
       \     exe "1," . 6 . "g/Last Update:.*/s/Last Update:.*/Last Update: " .strftime("%c")  |
+      \ endif |
+      \ endif |
 
 autocmd bufwritepost,filewritepost *
       \ if &ft == 'cpp'                                                                       |
       \   let xline = getline(1)                                                             |
       \   if xline == '// Copyright 2013 Karl Moritz Hermann'                                |
       \     call winrestview(g:winview)                                                       |
+      \ endif |
+      \ endif |
 
 
 "here is a more exotic version of my original Kwbd script
