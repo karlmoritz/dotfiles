@@ -78,6 +78,7 @@ fun! SetupVAM()
   endif
   let &rtp.=(empty(&rtp)?'':',').plugin_root_dir.'/vim-addon-manager'
   " call vam#ActivateAddons(['The_NERD_tree'])
+  " call vam#ActivateAddons(['LaTeX-Suite_aka_Vim-LaTeX'])
   call vam#ActivateAddons(['The_NERD_Commenter'])
   call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
   call vam#ActivateAddons(['Solarized'])
@@ -85,9 +86,10 @@ fun! SetupVAM()
   call vam#ActivateAddons(['bufkill'])
   call vam#ActivateAddons(['Supertab'])
   call vam#ActivateAddons(['a'])
+  call vam#ActivateAddons(['AutomaticLaTeXPlugin'])
   call vam#ActivateAddons(['github:bling/vim-airline'])
-  " call vam#ActivateAddons(['github:oblitum/rainbow'])
   call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
+  " call vam#ActivateAddons(['github:oblitum/rainbow'])
   "
   " call vam#ActivateAddons(['github:Raimondi/delimitMate'])
   " (<c-x><c-p> complete plugin names):
@@ -112,12 +114,26 @@ au BufNewFile,BufRead *
 
 
 
+" " LaTex / vim-latex settings
+" Stored in ftplugin/ATP_files/atprc.vim
+"
+" " IMPORTANT: grep will sometimes skip displaying the file name if you
+" " search in a singe file. This will confuse Latex-Suite. Set your grep
+" " program to always generate a file-name.
+" set grepprg=grep\ -nH\ $*
+
+" " OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
+" " 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
+" " The following changes the default filetype back to 'tex':
+" let g:tex_flavor='latex'
+" let g:Tex_DefaultTargetFormat='pdf'
+
 " Change to current directory automatically
 autocmd BufEnter * silent! lcd %:p:h
 " nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Automatically remove trailing whitespace from certain filetypes.
-autocmd FileType c,cpp,java,php,markdown,sh,python autocmd BufWritePre <buffer> :%s/\s\+$//e
+autocmd FileType c,cpp,java,php,markdown,sh,python,tex autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 " Nerd tree: don't autostart, and ignore some files..
 
@@ -292,17 +308,17 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " Automatic templates for C++ files
 autocmd bufnewfile *
-      \ if &ft == 'cpp'                                                                       |
-      \   so ~/.vim/cpp.header                                                                |
-      \   exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                              |
+      \ if &ft == 'cpp'                                                                      |
+      \   so ~/.vim/cpp.header                                                               |
+      \   exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                                |
       \   exe "1," . 6 . "g/Created:.*/s//Created: " .strftime("%d-%m-%Y")                   |
       \   exe "1," . 7 . "g/BEGIN.*/s//"                                                     |
       \ endif |
 
 autocmd bufwritepre,filewritepre *
       \ if &ft == 'cpp'                                                                       |
-      \   let xline = getline(1)                                                             |
-      \   if xline == '// Copyright 2013 Karl Moritz Hermann'                                |
+      \ let xline = getline(2)                                                                |
+      \   if xline == '// Author: Karl Moritz Hermann (mail@karlmoritz.com)'                  |
       \     let g:winview = winsaveview()                                                     |
       \     exe "1," . 6 . "g/File:.*/s//File: " .expand("%:t")                               |
       \     exe "1," . 6 . "g/Last Update:.*/s/Last Update:.*/Last Update: " .strftime("%c")  |
@@ -311,8 +327,8 @@ autocmd bufwritepre,filewritepre *
 
 autocmd bufwritepost,filewritepost *
       \ if &ft == 'cpp'                                                                       |
-      \   let xline = getline(1)                                                             |
-      \   if xline == '// Copyright 2013 Karl Moritz Hermann'                                |
+      \   let xline = getline(2)                                                              |
+      \   if xline == '// Author: Karl Moritz Hermann (mail@karlmoritz.com)'                  |
       \     call winrestview(g:winview)                                                       |
       \ endif |
       \ endif |
