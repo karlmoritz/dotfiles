@@ -78,17 +78,23 @@ fun! SetupVAM()
   endif
   let &rtp.=(empty(&rtp)?'':',').plugin_root_dir.'/vim-addon-manager'
   " call vam#ActivateAddons(['The_NERD_tree'])
-  " call vam#ActivateAddons(['LaTeX-Suite_aka_Vim-LaTeX'])
   call vam#ActivateAddons(['The_NERD_Commenter'])
   call vam#ActivateAddons(['github:fholgado/minibufexpl.vim'])
   call vam#ActivateAddons(['Solarized'])
   call vam#ActivateAddons(['C11_Syntax_Support'])
   call vam#ActivateAddons(['bufkill'])
-  call vam#ActivateAddons(['Supertab'])
+  " call vam#ActivateAddons(['Supertab'])
   call vam#ActivateAddons(['a'])
-  call vam#ActivateAddons(['AutomaticLaTeXPlugin'])
   call vam#ActivateAddons(['github:bling/vim-airline'])
   call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
+  call vam#ActivateAddons(['LaTeX_Box'])
+  " call vam#ActivateAddons(['github:honza/vim-snippets'])
+  " call vam#ActivateAddons(['github:MarcWeber/ultisnips'])
+
+  " Latex Box won the fight against the two below
+  " call vam#ActivateAddons(['LaTeX-Suite_aka_Vim-LaTeX'])
+  call vam#ActivateAddons(['AutomaticLaTeXPlugin'])
+  " Nice, but really slow
   " call vam#ActivateAddons(['github:oblitum/rainbow'])
   "
   " call vam#ActivateAddons(['github:Raimondi/delimitMate'])
@@ -113,23 +119,13 @@ au BufNewFile,BufRead *
       \ endif                                                                                       |
 
 
-
-" " LaTex / vim-latex settings
-" Stored in ftplugin/ATP_files/atprc.vim
-"
-" " IMPORTANT: grep will sometimes skip displaying the file name if you
-" " search in a singe file. This will confuse Latex-Suite. Set your grep
-" " program to always generate a file-name.
-" set grepprg=grep\ -nH\ $*
-
-" " OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" " 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" " The following changes the default filetype back to 'tex':
-" let g:tex_flavor='latex'
-" let g:Tex_DefaultTargetFormat='pdf'
+let g:LatexBox_latexmk_preview_continuously = 1
+let g:LatexBox_latexmk_async = 0
+" let g:LatexBox_latexmk_options = "-pvc"
+" autocmd VimLeave tex LatexmkStop
 
 " Change to current directory automatically
-autocmd BufEnter * silent! lcd %:p:h
+" autocmd BufEnter * silent! lcd %:p:h
 " nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Automatically remove trailing whitespace from certain filetypes.
@@ -157,8 +153,6 @@ set pumheight=15
 "let g:clang_auto_user_options = ''
 "let g:clang_library_path="/usr/lib/"
  
-"" SuperTab option for context aware completion
-"let g:SuperTabDefaultCompletionType = "context"
 
 "" Disable auto popup, use <Tab> to autocomplete
 "let g:clang_complete_auto = 0
@@ -237,6 +231,7 @@ let g:NERDSpaceDelims = 1
 
 " Use , for the leader key as opposed to \
 let mapleader = ","
+let maplocalleader = ","
 
 " Ctrl-C and Ctrl-V systemwide
 map  <C-V> "+gP
@@ -293,16 +288,38 @@ inoremap ii <ESC>
 
 nnoremap <Leader>- :HeaderguardAdd<CR>
 
-" Use <tab> and <s-tab> for navigation in snippets
-let g:UltiSnipsListSnippets="<c-tab>"
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
+"" SuperTab option for context aware completion
+" let g:SuperTabDefaultCompletionType = "context"
 " SuperTab completion fall-back
 " let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
 " let g:SuperTabDefaultCompletionType='<c-tab>'
 " let g:SuperTabNoCompleteAfter=''
+
+
+" Use <tab> and <s-tab> for navigation in snippets
+" let g:UltiSnips = {}
+" let g:UltiSnips.ListSnippets="<c-tab>"
+" let g:UltiSnips.ExpandTrigger="<tab>"
+" let g:UltiSnips.JumpForwardTrigger="<tab>"
+" let g:UltiSnips.JumpBackwardTrigger="<s-tab>"
+" let g:UltiSnips.always_use_first_snippet = 1
+
+" let g:UltiSnips.snipmate_ft_filter = {
+      " \ 'default' : {'filetypes': ["FILETYPE", "_"] },
+      " \ 'html'    : {'filetypes': ["html_minimal", "javascript", "_"] },
+      " \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
+      " \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+      " \ 'haml'    : {'filetypes': ["haml", "javascript"] },
+      " \ }
+
+" " don't load snipmate snippets by default
+" let g:UltiSnips.UltiSnips_ft_filter = {
+      " \ 'default' : {'filetypes': ['FILETYPE'] },
+      " \ 'html'    : {'filetypes': ["html_minimal", "javascript"] },
+      " \ 'php'    : {'filetypes': ["php", "html_minimal", "javascript"] },
+      " \ 'xhtml'    : {'filetypes': ["html_minimal", "javascript"] },
+      " \ 'all' : {'filetypes': ['all'] },
+      " \ }
 
 
 
