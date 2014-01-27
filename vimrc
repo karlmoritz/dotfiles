@@ -88,12 +88,14 @@ fun! SetupVAM()
   call vam#ActivateAddons(['github:bling/vim-airline'])
   call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
   call vam#ActivateAddons(['LaTeX_Box'])
+  " call vam#ActivateAddons(['github:lervag/LaTeX-Box'])
+  " call vam#ActivateAddons(['github:karlmoritz/LaTeX-Box'])
   " call vam#ActivateAddons(['github:honza/vim-snippets'])
   " call vam#ActivateAddons(['github:MarcWeber/ultisnips'])
 
   " Latex Box won the fight against the two below
   " call vam#ActivateAddons(['LaTeX-Suite_aka_Vim-LaTeX'])
-  call vam#ActivateAddons(['AutomaticLaTeXPlugin'])
+  " call vam#ActivateAddons(['AutomaticLaTeXPlugin'])
   " Nice, but really slow
   " call vam#ActivateAddons(['github:oblitum/rainbow'])
   "
@@ -119,10 +121,12 @@ au BufNewFile,BufRead *
       \ endif                                                                                       |
 
 
-let g:LatexBox_latexmk_preview_continuously = 1
-let g:LatexBox_latexmk_async = 0
+let g:LatexBox_latexmk_preview_continuously = 0
+let g:LatexBox_latexmk_async = 1
+
 " let g:LatexBox_latexmk_options = "-pvc"
 " autocmd VimLeave tex LatexmkStop
+au BufNewFile,BufRead,BufEnter *.tex setlocal spell spelllang=en_gb
 
 " Change to current directory automatically
 " autocmd BufEnter * silent! lcd %:p:h
