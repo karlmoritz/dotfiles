@@ -83,18 +83,17 @@ fun! SetupVAM()
   call vam#ActivateAddons(['Solarized'])
   call vam#ActivateAddons(['C11_Syntax_Support'])
   call vam#ActivateAddons(['bufkill'])
-  " call vam#ActivateAddons(['Supertab'])
+  call vam#ActivateAddons(['Supertab']) " for smart tab key
   call vam#ActivateAddons(['a'])
   call vam#ActivateAddons(['github:bling/vim-airline'])
   call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
+  " call vam#ActivateAddons(['auctex'])
   call vam#ActivateAddons(['LaTeX_Box'])
   " call vam#ActivateAddons(['github:lervag/LaTeX-Box'])
   " call vam#ActivateAddons(['github:karlmoritz/LaTeX-Box'])
   " call vam#ActivateAddons(['github:honza/vim-snippets'])
   " call vam#ActivateAddons(['github:MarcWeber/ultisnips'])
-
-  " Latex Box won the fight against the two below
-  " call vam#ActivateAddons(['LaTeX-Suite_aka_Vim-LaTeX'])
+  " Find a better replacement for this one
   " call vam#ActivateAddons(['AutomaticLaTeXPlugin'])
   " Nice, but really slow
   " call vam#ActivateAddons(['github:oblitum/rainbow'])
@@ -123,13 +122,13 @@ au BufNewFile,BufRead *
 
 let g:LatexBox_latexmk_preview_continuously = 0
 let g:LatexBox_latexmk_async = 1
+let g:LatexBox_Folding = 1
 
 " let g:LatexBox_latexmk_options = "-pvc"
-" autocmd VimLeave tex LatexmkStop
 au BufNewFile,BufRead,BufEnter *.tex setlocal spell spelllang=en_gb
 
 " Change to current directory automatically
-" autocmd BufEnter * silent! lcd %:p:h
+autocmd BufEnter * silent! lcd %:p:h
 " nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Automatically remove trailing whitespace from certain filetypes.
@@ -293,12 +292,11 @@ inoremap ii <ESC>
 nnoremap <Leader>- :HeaderguardAdd<CR>
 
 "" SuperTab option for context aware completion
-" let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabDefaultCompletionType = "context"
 " SuperTab completion fall-back
-" let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
+let g:SuperTabDefaultCompletionType='<c-x><c-o><c-p>'
 " let g:SuperTabDefaultCompletionType='<c-tab>'
-" let g:SuperTabNoCompleteAfter=''
-
+let g:SuperTabNoCompleteAfter=''
 
 " Use <tab> and <s-tab> for navigation in snippets
 " let g:UltiSnips = {}
