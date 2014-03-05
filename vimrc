@@ -30,6 +30,8 @@ set wildignore+=*.dylib        " add ignored extension
 set foldmethod=syntax                                                                  |
 set foldlevelstart=20
 
+set shell=/usr/bin/zsh
+
 setlocal expandtab
 
 syntax on                   " syntax highlighting
@@ -88,8 +90,8 @@ fun! SetupVAM()
   call vam#ActivateAddons(['github:bling/vim-airline'])
   call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
   " call vam#ActivateAddons(['auctex'])
-  call vam#ActivateAddons(['LaTeX_Box'])
-  " call vam#ActivateAddons(['github:lervag/LaTeX-Box'])
+  " call vam#ActivateAddons(['LaTeX_Box'])
+  call vam#ActivateAddons(['github:lervag/vim-latex'])
   " call vam#ActivateAddons(['github:karlmoritz/LaTeX-Box'])
   " call vam#ActivateAddons(['github:honza/vim-snippets'])
   " call vam#ActivateAddons(['github:MarcWeber/ultisnips'])
@@ -120,9 +122,8 @@ au BufNewFile,BufRead *
       \ endif                                                                                       |
 
 
-let g:LatexBox_latexmk_preview_continuously = 0
-let g:LatexBox_latexmk_async = 1
-let g:LatexBox_Folding = 1
+let g:latex_complete_close_braces = 1
+let g:latex_latexmk_quickfix = 0
 
 " let g:LatexBox_latexmk_options = "-pvc"
 au BufNewFile,BufRead,BufEnter *.tex setlocal spell spelllang=en_gb
@@ -226,9 +227,10 @@ let g:NERDSpaceDelims = 1
 
 "Documented, but doesn't work. Hack fix below.
 "let g:NERD_cpp_alt_style=0
-"let g:NERDCustomDelimiters = {
-"\ 'cpp': { 'leftAlt': '//', 'left': '/*', 'right': '*/' }, 
-"\ }
+let g:NERDCustomDelimiters = {
+      \ 'cpp': { 'leftAlt': '//', 'left': '/*', 'right': '*/' }, 
+      \ 'tex' : { 'left': '%' },
+      \ }
 
 " REMAPPINGS
 
