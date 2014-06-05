@@ -21,6 +21,7 @@ set laststatus=2               " always display the statusline in all windows
 set noshowmode                 " hide the default mode text (e.g. -- INSERT -- below the statusline)
 set t_Co=256                   " configure for 256 colors terminal
 set textwidth=80            " linebreak after 80 characters (C++ default)
+" set wrap
 set formatoptions=croqt     " Formatoptions: t/c: force linebreak r/o: continue comments in new line, q: format with gqq
 
 set wildignore+=CMakeFiles     " add ignored extension
@@ -228,7 +229,7 @@ let g:NERDSpaceDelims = 1
 "Documented, but doesn't work. Hack fix below.
 "let g:NERD_cpp_alt_style=0
 let g:NERDCustomDelimiters = {
-      \ 'cpp': { 'leftAlt': '//', 'left': '/*', 'right': '*/' }, 
+      \ 'cpp': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' }, 
       \ 'tex' : { 'left': '%' },
       \ }
 
