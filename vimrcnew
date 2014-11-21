@@ -4,7 +4,7 @@ set relativenumber          " show line numbers relative to current
 scriptencoding utf-8
 set encoding=utf-8
 
-source .vimrclocal
+source ~/.vimrclocal
 filetype plugin indent on
 syntax on
 
