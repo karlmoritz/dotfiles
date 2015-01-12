@@ -3,6 +3,9 @@ set showcmd                 " show number of lines selected
 set relativenumber          " show line numbers relative to current
 scriptencoding utf-8
 set encoding=utf-8
+set ignorecase              " search by default case insensitive
+set smartcase               " if there is an upper char, search sensitive
+set textwidth=80
 
 source ~/.vimrclocal
 filetype plugin indent on
@@ -35,19 +38,25 @@ VAMActivate The_NERD_Commenter Solarized
 VAMActivate github:fholgado/minibufexpl.vim bufkill 
 VAMActivate github:itchyny/lightline.vim
 VAMActivate a
+" VAMActivate github:raymond-w-ko/vim-lua-indent
 
-  " call vam#ActivateAddons(['C11_Syntax_Support'])
+VAMActivate lua%4344
+" VAMActivate vim-misc
+" VAMActivate clang
+
   " call vam#ActivateAddons(['bufkill'])
   " call vam#ActivateAddons(['Supertab']) " for smart tab key
-  " call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
   " " call vam#ActivateAddons(['auctex'])
-  " " call vam#ActivateAddons(['LaTeX_Box'])
   " call vam#ActivateAddons(['github:lervag/vim-latex'])
-  " " call vam#ActivateAddons(['github:karlmoritz/LaTeX-Box'])
   " " call vam#ActivateAddons(['github:honza/vim-snippets'])
   " " call vam#ActivateAddons(['github:MarcWeber/ultisnips'])
   " " Find a better replacement for this one
   " call vam#ActivateAddons(['AutomaticLaTeXPlugin'])
+
+set expandtab
+" set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 
 if !has('gui_running')
     set t_Co=16
@@ -62,8 +71,9 @@ colorscheme solarized
 " set guifont=Liberation\ Mono\ for\ Powerline\ 12
 set laststatus=2 " Launch airline with single tab open
 
+" colorscheme could also be solarized, but this one is nicer
 let g:lightline = {
-      \ 'colorscheme': 'solarized',
+      \ 'colorscheme': 'wombat',
       \ 'component': {
       \   'readonly': '%{&readonly?"":""}',
       \ },
@@ -85,6 +95,14 @@ vnoremap <C-C> "+y
 
 " Comment settings
 let g:NERDSpaceDelims = 1
+
+if &term =~ '^screen'
+  " tmux will send xterm-style keys when its xterm-keys option is on
+  execute "set <xUp>=\e[1;*A"
+  execute "set <xDown>=\e[1;*B"
+  execute "set <xRight>=\e[1;*C"
+  execute "set <xLeft>=\e[1;*D"
+endif
 
 map <C-left> :bp<CR>
 map <C-right> :bn<CR>
@@ -112,6 +130,20 @@ nnoremap <leader><space> :noh<cr>
 " Easy out of insert mode with double i.
 inoremap ii <ESC>
 
+
+" Some syntax highlighting to annoy me if I mistype.
+set colorcolumn=80
+highlight ColorColumn guibg=#073642
+highlight TrailingWhitespace guibg=#b58900
+highlight ExtraWhitespace    guibg=#b58900
+highlight TrailingWhitespace ctermbg=3
+highlight ColorColumn ctermbg=0
+highlight ExtraWhitespace    ctermbg=3
+
+autocmd Syntax * call matchadd('TrailingWhitespace', '\s\+$')
+
+" Automatically remove trailing whitespace from certain filetypes.
+autocmd FileType c,cpp,java,php,markdown,sh,python,tex,lua autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 "here is a more exotic version of my original Kwbd script
 "delete the buffer; keep windows; create a scratch buffer if no buffers left
