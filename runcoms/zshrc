@@ -1,0 +1,31 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+export TMPDIR="/tmp"
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+# Customize to your needs...
+
+bindkey "^R" history-incremental-search-backward
+setopt INTERACTIVE_COMMENTS
+
+bindkey '^[[1;5D' vi-backward-word
+bindkey '^[[1;5C' vi-forward-word
+
+# Source custom RC per machine
+if [[ -s "${ZDOTDIR:-$HOME}/.zshrclocal" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zshrclocal"
+fi
+
+unsetopt CDABLE_VARS          # Change directory to a path stored in a variable.
+setopt nocdablevars
+
+export EDITOR=/usr/bin/vim
+export VISUAL=/usr/bin/vim

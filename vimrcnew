@@ -92,6 +92,7 @@ let maplocalleader = ","
 map  <C-V> "+gP
 cmap <C-V> <C-R>+
 vnoremap <C-C> "+y
+set clipboard=unnamedplus
 
 " Comment settings
 let g:NERDSpaceDelims = 1
