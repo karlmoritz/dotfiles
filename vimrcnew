@@ -208,5 +208,10 @@ endfunction
 command! Kwbd call s:Kwbd(1)
 nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
 
+if v:version >= 700
+  au BufLeave * let b:winview = winsaveview()
+  au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+endif
+
 " Create a mapping (e.g. in your .vimrc) like this:
 nmap <leader>q <Plug>Kwbd
