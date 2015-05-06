@@ -7,6 +7,9 @@ set ignorecase              " search by default case insensitive
 set smartcase               " if there is an upper char, search sensitive
 set textwidth=80
 
+set foldmethod=syntax                                                                  |
+set foldlevelstart=20
+
 source ~/.vimrclocal
 filetype plugin indent on
 syntax on
@@ -35,9 +38,11 @@ endfun
 call SetupVAM()
 
 VAMActivate The_NERD_Commenter Solarized
-VAMActivate github:fholgado/minibufexpl.vim bufkill 
+VAMActivate github:fholgado/minibufexpl.vim bufkill
 VAMActivate github:itchyny/lightline.vim
 VAMActivate a
+VAMActivate github:lervag/vim-latex
+
 " VAMActivate github:raymond-w-ko/vim-lua-indent
 
 VAMActivate lua%4344
@@ -145,6 +150,12 @@ autocmd Syntax * call matchadd('TrailingWhitespace', '\s\+$')
 
 " Automatically remove trailing whitespace from certain filetypes.
 autocmd FileType c,cpp,java,php,markdown,sh,python,tex,lua autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+" Latex / vim-latex settings
+
+let g:latex_complete_close_braces = 1
+let g:latex_latexmk_quickfix = 0
+
 
 "here is a more exotic version of my original Kwbd script
 "delete the buffer; keep windows; create a scratch buffer if no buffers left
