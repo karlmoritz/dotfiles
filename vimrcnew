@@ -41,7 +41,7 @@ VAMActivate The_NERD_Commenter Solarized
 VAMActivate github:fholgado/minibufexpl.vim bufkill
 VAMActivate github:itchyny/lightline.vim
 VAMActivate a
-VAMActivate github:lervag/vim-latex
+VAMActivate github:lervag/vimtex
 
 " VAMActivate github:raymond-w-ko/vim-lua-indent
 
@@ -52,7 +52,6 @@ VAMActivate lua%4344
   " call vam#ActivateAddons(['bufkill'])
   " call vam#ActivateAddons(['Supertab']) " for smart tab key
   " " call vam#ActivateAddons(['auctex'])
-  " call vam#ActivateAddons(['github:lervag/vim-latex'])
   " " call vam#ActivateAddons(['github:honza/vim-snippets'])
   " " call vam#ActivateAddons(['github:MarcWeber/ultisnips'])
   " " Find a better replacement for this one
