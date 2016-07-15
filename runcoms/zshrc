@@ -5,7 +5,6 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-export TMPDIR="/tmp"
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -29,3 +28,17 @@ setopt nocdablevars
 
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
+
+# Deepmind Bash RC
+[[ -e ~/.profile ]] && emulate sh -c 'source /google/data/ro/teams/deepmind-eng/config/bashrc' > /dev/null
+
+# Setup CUDA and GPU
+# nvsetup # Only iff /dev/nvidia-uvm doesn't exist
+export CUDA_BIN_PATH=/usr/local/cuda/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+
+# Setup texlive
+export PATH=$PATH:/opt/texbin
+
+# Fix TMUX pretty
+alias tmux="TERM=screen-256color-bce tmux"
