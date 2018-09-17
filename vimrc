@@ -89,6 +89,7 @@ fun! SetupVAM()
   call vam#ActivateAddons(['Supertab']) " for smart tab key
   call vam#ActivateAddons(['a'])
   call vam#ActivateAddons(['github:bling/vim-airline'])
+  call vam#ActivateAddons(['github:vim-airline/vim-airline-themes'])
   call vam#ActivateAddons(['github:karlmoritz/vim-headerguard'])
   " call vam#ActivateAddons(['auctex'])
   " call vam#ActivateAddons(['LaTeX_Box'])
@@ -181,7 +182,7 @@ endif
 " Solarized settings
 "set terminal colors to 16. needed to make solarized scheme work
 syntax on
-set background=dark
+set background=light
 colorscheme solarized
 
 " vim-airline Setup
