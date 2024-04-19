@@ -11,6 +11,8 @@ set foldmethod=syntax                                                           
 set foldlevelstart=20
 set spell spelllang=en_gb
 
+set hidden " allow to switch buffer without saving
+
 source ~/.vimrclocal
 filetype plugin indent on
 syntax on
@@ -43,11 +45,17 @@ VAMActivate github:fholgado/minibufexpl.vim bufkill
 VAMActivate github:itchyny/lightline.vim
 VAMActivate a
 VAMActivate github:lervag/vimtex
+VAMActivate github:leafOfTree/vim-vue-plugin
 
 " VAMActivate github:raymond-w-ko/vim-lua-indent
 
 VAMActivate lua%4344
 
+"#VAMActivate github:pangloss/vim-javascript
+" VAMActivate github:leafgarland/typescript-vim
+"VAMActivate github:peitalin/vim-jsx-typescript
+"#VAMActivate github:styled-components/vim-styled-components
+"#VAMActivate github:jparise/vim-graphql
 
 VAMActivate UltiSnips
 VAMActivate vim-snippets
@@ -167,7 +175,10 @@ highlight ExtraWhitespace    ctermbg=3
 autocmd Syntax * call matchadd('TrailingWhitespace', '\s\+$')
 
 " Automatically remove trailing whitespace from certain filetypes.
-autocmd FileType c,cpp,java,php,markdown,sh,python,tex,lua autocmd BufWritePre <buffer> :%s/\s\+$//e
+autocmd FileType c,cpp,java,json,php,markdown,sh,python,tex,lua,vue autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+" JSON indentation to 4
+autocmd Filetype json setlocal ts=4 sw=4 expandtab
 
 " Latex / vim-latex settings
 
